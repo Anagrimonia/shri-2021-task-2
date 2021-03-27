@@ -7,7 +7,7 @@ const mode = env.development ? 'development' : 'production';
   return {
     mode,
     entry: [
-      './src/index.ts',
+      './build/index.js',
     ],
     plugins: [ ],
     module: {

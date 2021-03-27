@@ -159,12 +159,13 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
   // -----=== CREATING DIAGRAM DATA ===-----
 
   const lastCommits = lastSprint ? commitsBySprints?.get(lastSprint.id)  || [] : [];
+  let diffCommits = (currentSprint && lastSprint) ? currentCommits.length - lastCommits.length : 0;
 
   const diagramData : stories.DiagramData = { 
     title: 'Размер коммитов', 
     subtitle: currentSprint ? currentSprint.name : '', 
     totalText: currentSprint ? `${String(currentCommits.length)} ${wordEnd(currentCommits.length, 'коммит', '', 'а', 'ов')}` : '',
-    differenceText: `${(currentSprint && lastSprint) ? String(currentCommits.length - lastCommits.length) : '?'} с прошлого спринта`, 
+    differenceText: `${diffCommits >= 0 ? '+' : ''}${String(diffCommits)} с прошлого спринта`, 
     categories: (() => {
 
       const findEdgeIndex = (changes : number) : number => 
@@ -204,7 +205,7 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
         result.push({ 
           title: text[i],
           valueText: `${String(curr)} ${wordEnd(curr, 'коммит', '', 'а', 'ов')}`,
-          differenceText: `${String(curr - last)} ${wordEnd(Math.abs(curr - last), 'коммит', '', 'а', 'ов')}`
+          differenceText: `${curr - last >= 0 ? '+' : ''}${String(curr - last)} ${wordEnd(Math.abs(curr - last), 'коммит', '', 'а', 'ов')}`
         });
       }
       return result;
