@@ -7,7 +7,7 @@ const { prepareData } = require('../src/index');
 
 describe('PrepareData tests', () => {
     it('Checking an example', () => {
-        const data = prepareData(input, { sprintId: 977 })
+        const data = prepareData(input, { sprintId: 974 })
         
         expect(data).to.deep.equal(output);
     });
