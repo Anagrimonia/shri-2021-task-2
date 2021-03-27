@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "strict": true,
-    "allowJs": true,
+    "allowJs": false,
     "module": "commonjs",
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
+    "rootDir": "src",
     "outDir": "build",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "downlevelIteration": true 
   },
-  "include": [
-    "./src/*.ts"
-  ]
 }

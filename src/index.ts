@@ -1,5 +1,5 @@
-import * as types from './types';
-import * as stories from './stories';
+import * as types from './types/types';
+import * as stories from './types/stories';
 
 import wordEnd from './helpers/wordEnd';
 
@@ -100,14 +100,17 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
     subtitle: currentSprint ? currentSprint.name : '', 
     emoji: '👑',
     users: [...commitsByUserSum]
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => b[1] - a[1] || a[0] - b[0])
     .map(([k, v]) => {
-      let user : types.User | undefined = entitiesMap['User'].get(k);
+      let userOrId : types.User | types.UserId | undefined = entitiesMap['User'].get(k) ;
+      let user : any;
+      if (typeof userOrId === "number") user = entitiesMap['User'].get(userOrId as types.SummaryId);
+      else user = userOrId;
       return { 
         id: k, 
         name: user ? user.name as string : '', 
         avatar: user ? user.avatar as string : '', 
-        valueText: v
+        valueText: String(v)
       } as unknown as stories.User;
     })
   };
@@ -119,9 +122,13 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
     subtitle: currentSprint ? currentSprint.name : '', 
     emoji: '🔎',
     users: [...commentsByUserSumLikes]
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => b[1] - a[1] || a[0] - b[0])
     .map(([k, v]) => {
-      let user : types.User | undefined = entitiesMap['User'].get(k);
+      let userOrId : types.User | types.UserId | undefined = entitiesMap['User'].get(k) ;
+      let user : any;
+      if (typeof userOrId === "number") user = entitiesMap['User'].get(userOrId as types.SummaryId);
+      else user = userOrId;
+      
       return { 
         id: k, 
         name: user ? user.name as string : '', 
@@ -143,7 +150,7 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
         title: String(k), 
         hint: sprint ? sprint.name : '', 
         value: v.length,
-        active: sprint && sprint.id === sprintId ? true : undefined
+        ...((sprint && sprint.id === sprintId) && { active: true })
       };
     }),
     users: leadersData.users
@@ -254,4 +261,4 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
 
 }
 
-module.exports = { prepareData };
+module.exports = { prepareData }
