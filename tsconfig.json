@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "allowJs": false,
-    "module": "es6",
+    "module": "amd",
     "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
