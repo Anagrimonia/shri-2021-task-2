@@ -2,13 +2,12 @@
   "compilerOptions": {
     "strict": true,
     "allowJs": false,
-    "module": "amd",
+    "module": "commonjs",
     "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
     "rootDir": ".",
     "outDir": "build",
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "downlevelIteration": true 
   },

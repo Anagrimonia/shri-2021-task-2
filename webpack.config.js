@@ -29,6 +29,8 @@ const mode = env.development ? 'development' : 'production';
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, 'build'),
-    }
+      libraryTarget: 'umd',
+      globalObject: 'this'
+    },
   }
 };
