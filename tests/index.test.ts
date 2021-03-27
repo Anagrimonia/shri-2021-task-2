@@ -1,9 +1,9 @@
-import { expect } from 'chai';
+const { expect } = require('chai');
 
-import input from '../input.json';
-import output from '../output.json';
+import input from './input.json';
+import output from './output.json';
 
-const { prepareData } = require('../index');
+const { prepareData } = require('../src/index');
 
 describe('PrepareData tests', () => {
     it('Checking an example', () => {
