@@ -23,6 +23,8 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
   let commentsBySprints : Map<types.SprintId, types.Comment[]> = new Map();
 
   // -----=== Grouping data by EntityType ===-----
+  
+  /*
   entities.map((obj) => {
     switch (obj.type) {
       case "Comment": entitiesArray['Comment'].push(obj);      break;
@@ -32,6 +34,36 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
       case "User"   : entitiesMap['User'].set(obj.id, obj);    break;
     } 
   });
+  */
+
+  // -----=== DEEP NESTED CASE: ITERATIVE JSON TRAVERSE ===-----
+  let entity : types.Entity;
+  
+  for (let entity of entities) {
+    let queue : types.Entity[] = [entity];
+        
+    while (queue.length) {
+
+      let obj : types.Entity | undefined = queue.shift();
+      if (!obj) continue;
+
+      switch (obj.type) {
+        case "Comment": entitiesArray['Comment'].push(obj);      break;
+        case "Commit" : entitiesArray['Commit'].push(obj);       break;
+        case "Sprint" : entitiesArray['Sprint'].push(obj);       break;
+        case "Summary": entitiesMap['Summary'].set(obj.id, obj); break;
+        case "User"   : entitiesMap['User'].set(obj.id, obj);    break;
+      }
+
+      let k: keyof typeof obj;  
+      for (k in obj) {
+        if (obj[k] !== null && typeof obj[k] === 'object')
+          // @ts-ignore
+          queue.push(obj[k]);
+      }
+    }
+  }
+
 
   // -----=== Sorting sprints, commits & comments by date ===-----
   entitiesArray['Sprint' ].sort((a, b) => a.startAt   - b.startAt);
@@ -82,14 +114,26 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
   // -----=== Summarizing current sprint commits by author ===-----
   const commitsByUserSum : Map<types.UserId, number> = new Map();
 
-  for (const { author } of currentCommits) 
-    commitsByUserSum.set(author as types.UserId, (commitsByUserSum.get(author as types.UserId) || 0) + 1);
+  for (const { author } of currentCommits) {
+    
+    let id : any;
+    if (typeof author === "number") id = author;
+    else id = author.id;
+
+    commitsByUserSum.set(id as types.UserId, (commitsByUserSum.get(id as types.UserId) || 0) + 1);
+  }
 
   // -----=== Grouping current sprint comments by author ===-----
   const commentsByUserSumLikes : Map<types.UserId, number> = new Map();
 
-  for (const { author, likes } of currentComments) 
-    commentsByUserSumLikes.set(author as types.UserId, (commentsByUserSumLikes.get(author as types.UserId) || 0) + likes.length);  
+  for (const { author, likes } of currentComments)  {
+    
+    let id : any;
+    if (typeof author === "number") id = author;
+    else id = author.id;
+
+    commentsByUserSumLikes.set(id as types.UserId, (commentsByUserSumLikes.get(id as types.UserId) || 0) + likes.length);  
+  }
 
   // ---------------------------------------------------------------
 
@@ -102,10 +146,7 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
     users: [...commitsByUserSum]
     .sort((a, b) => b[1] - a[1] || a[0] - b[0])
     .map(([k, v]) => {
-      let userOrId : types.User | types.UserId | undefined = entitiesMap['User'].get(k) ;
-      let user : any;
-      if (typeof userOrId === "number") user = entitiesMap['User'].get(userOrId as types.SummaryId);
-      else user = userOrId;
+      let user : types.User | undefined = entitiesMap['User'].get(k) ;
       return { 
         id: k, 
         name: user ? user.name as string : '', 
@@ -124,10 +165,7 @@ function prepareData(entities: types.Entity[], { sprintId } : { sprintId: number
     users: [...commentsByUserSumLikes]
     .sort((a, b) => b[1] - a[1] || a[0] - b[0])
     .map(([k, v]) => {
-      let userOrId : types.User | types.UserId | undefined = entitiesMap['User'].get(k) ;
-      let user : any;
-      if (typeof userOrId === "number") user = entitiesMap['User'].get(userOrId as types.SummaryId);
-      else user = userOrId;
+      let user : types.User | undefined = entitiesMap['User'].get(k) ;
       
       return { 
         id: k, 
