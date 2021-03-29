@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set Timezone
-      uses: actions/set-timezone-action@v1.1
+      uses: szenius/set-timezone@v1.0
       with:
         timezoneLinux: "Moscow/Russia"
     - name: Use Node.js ${{ matrix.node-version }}
