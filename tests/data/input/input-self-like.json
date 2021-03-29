@@ -1,0 +1,61 @@
+[
+  {
+    "id":1,
+    "type":"Sprint",
+    "name":"Test sprint",
+    "startAt":1611435902000,
+    "finishAt":1612040702000
+  },
+  {
+    "id":"031b2e6d4a44ac1280d1374ef61606e571afe47f",
+    "type":"Commit",
+    "timestamp":1611535902000,
+    "message":"Test commit",
+    "author":
+    {
+      "id":1,
+      "type":"User",
+      "name":"Test user",
+      "login":"test-user",
+      "avatar":"1.jpg",
+      "friends":[],
+      "comments":[
+        {
+          "id":"1e23f219-20f2-4e40-83a3-478b6e755f0a",
+          "type":"Comment",
+          "author": 1,
+          "message":"I love myself!",
+          "createdAt":1611535902000,
+          "likes":[
+            1
+          ]
+        }
+      ],
+      "commits":[
+        "031b2e6d4a44ac1280d1374ef61606e571afe47f"
+      ]
+    },
+    "summaries":[
+      {
+        "id":1,
+        "type":"Summary",
+        "path":"path.json",
+        "added":0,
+        "removed":1000,
+        "comments":[
+          
+        ]
+      },
+      {
+        "id":2,
+        "type":"Summary",
+        "path":"path.json",
+        "added":1000,
+        "removed":0,
+        "comments":[
+          
+        ]
+      }
+    ]
+  }
+]
