@@ -22,11 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set Timezone
-    - uses: szenius/set-timezone@v1.0
+      uses: actions/set-timezone-action@v1.1
+      with:
+        timezoneLinux: "Moscow/Russia"
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        timezoneLinux: "Moscow/Russia"
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
