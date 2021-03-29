@@ -37,4 +37,3 @@ jobs:
 
       - name: Run Tests
         run: deno test tests/index.test.ts
-        run: deno test -A --unstable
